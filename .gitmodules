@@ -1,0 +1,12 @@
+[submodule "edk2"]
+	path = edk2
+	url = https://github.com/tianocore/edk2.git
+[submodule "qemu"]
+	path = qemu
+	url = https://github.com/AMDESE/qemu.git
+[submodule "sev-step-host-kernel"]
+	path = sev-step-host-kernel
+	url = https://git.its.uni-luebeck.de/research-projects/sev-step/sev-step-host-kernel.git
+[submodule "sev-step-userland"]
+	path = sev-step-userland
+	url = https://git.its.uni-luebeck.de/research-projects/sev-step/sev-step-userland.git
