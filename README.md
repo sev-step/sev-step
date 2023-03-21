@@ -9,9 +9,9 @@ This repo uses git submodules. Run `git submodule update --init --recursive` to 
 # Build Hypervisor Components
 In this section you will install the modified SEV STEP kernel, as well as compatible stock versions of QEMU and OVMF/edk2.
 
-1) Run `./build/build.sh` to build OVMF, QEMU, and the Linux kernel. If you run into any missing dependencies
+1) Run `./build.sh` to build OVMF, QEMU, and the Linux kernel. If you run into any missing dependencies
 try `sudo apt-get build-dep ovmf qemu-system-x86`.
-All packages are only installed locallay in `./local-installation/` e.g. global installation of qemu wont be overwritten.
+All packages are only installed locally in `./local-installation/`.
 2) Install the host kernel  using `dpkg -i ./kernel-packages/*.deb`
 3) Create the config file `/etc/modprobe.d/kvm.conf` with content
 ```
@@ -23,16 +23,15 @@ options kvm_amd sev-snp=1 sev=1 sev-es=1
 # Our patch is for the old version that is phased out if this flag is set
 options kvm tdp_mmu=0                    
 ```
-5) Boot into the new kernel. It is named `-sev-step-<git commit>`
+5) Boot into the new kernel. It is named `...-sev-step-<git commit>`
 
 
 The following is based on [1].
 
-To enable SEV on your system, you might need to change some BIOS options. Look for options regarding
-Usually, there is a general "SEV Enabled" option as well as a `SEV-ES ASID space limit` option and a`SNP Memory Coverage`.
-`SEV-ES ASID space limit` should be greater than 1.
+To enable SEV on your system, you might need to change some BIOS options.
+Usually, there is a general "SEV Enabled" option as well as a `SEV-ES ASID space limit` option and a `SNP Memory Coverage`. `SEV-ES ASID space limit` should be greater than `1`.
 
-If SEV is enabled, you  should get values similar to the following when running the specified commands on the host system
+If SEV is enabled, you  should get values similar to the following when running the specified commands on the host system. (Make sure you already rebooted into the new kernel)
 ```
 # dmesg | grep -i -e rmp -e sev
 SEV-SNP: RMP table physical address 0x0000000035600000 - 0x0000000075bfffff
@@ -50,15 +49,16 @@ Y
 
 
 ## Create and Run a SEV VM
+In this section, we will setup a SEV SNP VM using the toolchain we just built.
 
-1) Create VM disk with `./local-installation/usr/local/bin/qemu-img  create -f qcow2 <IMAGE_NAME>.qcow2 20G`
-2) Start VM with `./launch-qemu.sh -hda <IMAGE_NAME>.qcow2 -cdrom <Ubuntu 22.04.1 iso> -vnc 1` where `<Ubuntu 22.04.1 iso>` is the path
+1) Create a disk for the VM with `./local-installation/usr/local/bin/qemu-img  create -f qcow2 <VM_DISK.qcow2> 20G`
+2) Start VM with `sudo ./launch-qemu.sh -hda <VM_DISK.qcow2> -cdrom <Ubuntu 22.10 iso> -vnc :1` where `<Ubuntu 22.10 iso>` is the path
 to the regular Ubuntu installation iso. While you can use other Distros, their SEV support might vary. The most important part is, that they ship at least
-kernel version 5.19.
+kernel version 5.19, as this is the first mainline kernel version that supports running as a SEV SNP guest.
 3) Connect to the VM via a VNC viewer on port `5901` and perform a standard installation
 4) Once the installation is done, terminate qemu with `ctrl a+x` or use `sudo kill $(pidof qemu-system-x86)`
 4) Start the VM again and connect with VNC. Install the OpenSSH server and configure it to autostart. The `./launch-qemu.sh` script already forwards VM port 22 to host port 2222 and VM port 8080 to host port 8080
-5) Use `./launch-qemu.sh -hda ../test-vm.qcow2 -console serial -sev-snp` to start the VM with SEV-SNP protection. You might want to also supply the `-allow-debug`
+5) Use `sudo ./launch-qemu.sh -hda <VM_DISK.qcow2> -sev-snp` to start the VM with SEV-SNP protection. You might want to also supply the `-allow-debug`
 which enables the SEV debug API. Many **test functions** of the sev step framework require this to get access to the VM's instruction pointer or other register content.
 
 
