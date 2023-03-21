@@ -6,7 +6,7 @@
 	url = https://github.com/AMDESE/qemu.git
 [submodule "sev-step-host-kernel"]
 	path = sev-step-host-kernel
-	url = https://git.its.uni-luebeck.de/research-projects/sev-step/sev-step-host-kernel.git
+	url = https://github.com/sev-step/sev-step-host-kernel
 [submodule "sev-step-userland"]
 	path = sev-step-userland
-	url = https://git.its.uni-luebeck.de/research-projects/sev-step/sev-step-userland.git
+	url = https://github.com/sev-step/sev-step-userland
