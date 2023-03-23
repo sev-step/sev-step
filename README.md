@@ -63,7 +63,7 @@ which enables the SEV debug API. Many **test functions** of the sev step framewo
 
 
 ## Use Sev Step Library
-Head over to the readme in [./sev-step-userland/](sev-step-userland/README.md) to learn how to use the sev step library.
+Head over to the `README.md` in the `sev-step-userland` submodule to learn how to use the sev step library.
 
 # References
 [1] https://github.com/AMDESE/AMDSEV/tree/sev-snp-devel#prepare-host
