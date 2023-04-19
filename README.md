@@ -23,7 +23,7 @@ options kvm_amd sev-snp=1 sev=1 sev-es=1
 # Our patch is for the old version that is phased out if this flag is set
 options kvm tdp_mmu=0                    
 ```
-5) Boot into the new kernel. It is named `...-sev-step-<git commit>`
+4) Boot into the new kernel. It is named `...-sev-step-<git commit>`
 
 
 The following is based on [1].
